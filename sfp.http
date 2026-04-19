@@ -1,0 +1,5 @@
+#mkdir folder name testFolder;
+
+### place folder testFolder;
+### command name testURL;
+GET http://localhost:80/api/user
