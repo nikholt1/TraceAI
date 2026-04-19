@@ -2,7 +2,6 @@ package org.example.bff.security;
 
 
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -20,64 +19,56 @@ import org.springframework.security.web.context.SecurityContextRepository;
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfig {
-
     @Bean
     SecurityContextRepository securityContextRepository() {
         return new HttpSessionSecurityContextRepository();
-
     }
 
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) {
+    SecurityFilterChain securityFilterChain(HttpSecurity http
+    ) {
         http
                 .csrf(CsrfConfigurer::spa)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/**").authenticated()
+                        .requestMatchers("/api/login", "/api/user").permitAll()
                         .anyRequest().authenticated()
                 )
+                // Use the built-in UsernamePasswordAuthenticationFilter but make it SPA-friendly
                 .formLogin(form -> form
                         .loginProcessingUrl("/api/login")
-                        .successHandler((req, res, auth) -> res.setStatus(HttpServletResponse.SC_NO_CONTENT))
-                        .failureHandler((req, res, auth) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED))
+                        .successHandler((req, res, auth) -> res.setStatus(HttpServletResponse.SC_NO_CONTENT)) // 204
+                        .failureHandler((req, res, ex) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED)) // 401
                 )
                 .logout(logout -> logout
                         .logoutUrl("/api/logout")
-                        .logoutSuccessHandler((req, res, auth) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED))
+                        .logoutSuccessHandler((req, res, auth) -> res.setStatus(HttpServletResponse.SC_NO_CONTENT)) // 204
                 )
+                // Return 401 instead of redirecting to /login
                 .exceptionHandling(eh -> eh
-                        .authenticationEntryPoint((req, res, auth) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED))
+                        .authenticationEntryPoint((req, res, ex) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED))
                 );
         ;
         return http.build();
     }
 
     @Bean
-    UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
-        // USR detail set from MySQL database later
-        ///  TODO: fetch user from DB class url defined -> .properties
+    UserDetailsService userDetailsManager(PasswordEncoder passwordEncoder) {
         var u1 = User.builder()
                 .username("user")
-                .password("pw")
+                .password(passwordEncoder.encode("pw"))
                 .roles("USER")
                 .build();
-
         var u2 = User.builder()
                 .username("admin")
-                .password("pw")
+                .password(passwordEncoder.encode("pw"))
                 .roles("ADMIN")
                 .build();
-
         return new InMemoryUserDetailsManager(u1, u2);
-
     }
-
 
 
     @Bean
-    PasswordEncoder passwordEncorder() {
+    PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-
-
 }

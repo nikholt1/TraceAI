@@ -13,12 +13,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
+    private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
-
-    private static final Logger LOG = LoggerFactory.getLogger(UserController.class);
-
-    public record UserResponse(String userName, List<String> role) {
-
+    public record UserResponse(String username, List<String> roles) {
     }
 
     @GetMapping
@@ -32,7 +29,7 @@ public class UserController {
         if (roles.isEmpty()) {
             roles = List.of("USER");
         }
+
         return new UserResponse(subject, roles);
     }
-
 }

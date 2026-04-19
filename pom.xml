@@ -10,6 +10,13 @@
     <artifactId>application</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>4.0.5</version>
+        <relativePath/>
+    </parent>
     <!-- IMPORTANT -->
     <packaging>pom</packaging>
 
