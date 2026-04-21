@@ -127,14 +127,14 @@ async function handleLogin(event) {
     const password = formData.get("password");
 
     try {
+        const csrfToken = getCsrfToken();
         const response = await fetch(`${BASE_URL}/api/login`, {
             method: "POST",
-            credentials: "include",
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded",
-                "X-XSRF-TOKEN": getCsrfToken()
+                "X-XSRF-TOKEN": csrfToken
             },
-            body: new URLSearchParams({ username, password })
+            body: new URLSearchParams({username, password})
         });
 
         if (!response.ok) {
@@ -198,4 +198,3 @@ function getCsrfToken() {
     const match = document.cookie.match(/XSRF-TOKEN=([^;]+)/);
     return match ? decodeURIComponent(match[1]) : null;
 }
-
