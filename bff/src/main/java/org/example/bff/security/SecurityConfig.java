@@ -25,15 +25,21 @@ public class SecurityConfig {
     }
 
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http
-    ) {
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(CsrfConfigurer::spa)
+                // H2 console uses a POST form; easiest is to disable CSRF protection for it
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"))
+
+                // H2 console is rendered in frames
+                .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()))
+
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers("/api/login", "/api/user").permitAll()
+
                         .anyRequest().authenticated()
                 )
-                // Use the built-in UsernamePasswordAuthenticationFilter but make it SPA-friendly
+
                 .formLogin(form -> form
                         .loginProcessingUrl("/api/login")
                         .successHandler((req, res, auth) -> res.setStatus(HttpServletResponse.SC_NO_CONTENT)) // 204
@@ -43,11 +49,10 @@ public class SecurityConfig {
                         .logoutUrl("/api/logout")
                         .logoutSuccessHandler((req, res, auth) -> res.setStatus(HttpServletResponse.SC_NO_CONTENT)) // 204
                 )
-                // Return 401 instead of redirecting to /login
                 .exceptionHandling(eh -> eh
                         .authenticationEntryPoint((req, res, ex) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED))
                 );
-        ;
+
         return http.build();
     }
 
