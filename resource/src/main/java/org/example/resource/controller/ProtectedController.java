@@ -22,3 +22,4 @@ public class ProtectedController {
         return new ProtectedResponse(String.format("Hello %s - This is a protected resource!", "ANONYMOUS"));
     }
 }
+
