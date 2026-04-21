@@ -28,4 +28,26 @@ public class PromptController {
         return response.map(ResponseEntity::ok);
     }
 
+    ///  TODO implementer CISData ind i prompt:
+    //    JsonNode json = objectMapper.readTree(entity.getBody());
+    //
+    //    JsonNode cw = json.get("current_weather");
+    //
+    //    String promptData = String.format(
+    //            "Temperature: %.1f°C, Wind: %.1f km/h, Time: %s",
+    //            cw.get("temperature").asDouble(),
+    //            cw.get("windspeed").asDouble(),
+    //            cw.get("time").asText()
+    //    );
+
+    //    så
+    //    String prompt = """
+    //Here is current weather data:
+    //
+    //Temperature: %.1f°C
+    //Wind speed: %.1f km/h
+    //Time: %s
+    //
+    //Describe the weather in a natural sentence.
+    //""".formatted(temp, wind, time);
 }

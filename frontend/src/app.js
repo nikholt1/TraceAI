@@ -8,10 +8,22 @@ const UI_ELEMENTS = {
     userInfo: null
 };
 
+async function createCisData() {
+    const csrfToken = getCsrfToken();
+    const response = await fetch(`${BASE_URL}/api/cisdata`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "X-XSRF-TOKEN": csrfToken
+        },
+        body: new URLSearchParams({username, password})
+    });
+}
+
 async function initApp() {
     setupUi();
     showLoginForm();
-
+    await createCisData();
     try {
         // This request serves two purposes:
         // 1. If the user is already logged in, we get their user info
