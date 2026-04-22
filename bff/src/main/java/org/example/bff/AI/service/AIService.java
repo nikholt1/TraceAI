@@ -18,6 +18,16 @@ public class AIService {
     private static final Logger log = LoggerFactory.getLogger(AIService.class);
     private final AIClient aiClient;
     private final CISDataService cisDataService;
+
+    private final String INSTRUCTION = """
+            If the user's message does not contain anything questioning the weather
+            Rules:
+            - Reprompt the user with the statement "i cannot answer anything else but about the weather"
+                 
+            """;
+
+
+
     public AIService(AIClient aiClient, CISDataService cisDataService) {
         this.aiClient = aiClient;
         this.cisDataService = cisDataService;
@@ -26,6 +36,8 @@ public class AIService {
     public record ResponseDto(String response) {}
 
     public Mono<ResponseDto> getResponse(String prompt) {
+        cisDataService.createCISData();
+        prompt = INSTRUCTION + prompt;
         prompt = checkAndInject(prompt);
         return aiClient.getResponses(prompt)
                 .map(this::mapToResponseDto);
@@ -36,7 +48,7 @@ public class AIService {
         if (prompt.contains("weather")) {
             currentData = cisDataService.getNewestData();
         }
-        prompt += "newest weather in copenhagen is: " + currentData;
+        prompt += currentData;
         System.out.println(prompt);
         return prompt;
     }

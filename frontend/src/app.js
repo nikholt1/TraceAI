@@ -23,7 +23,7 @@ async function createCisData() {
 async function initApp() {
     setupUi();
     showLoginForm();
-    await createCisData();
+    // await createCisData();
     try {
         // This request serves two purposes:
         // 1. If the user is already logged in, we get their user info
