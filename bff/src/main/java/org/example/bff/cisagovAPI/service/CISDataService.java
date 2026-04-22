@@ -84,4 +84,14 @@ public class CISDataService {
         List<CISData> data = repo.findAll();
         return data;
     }
+
+    public String getNewestData() {
+        List<CISData> data = repo.findAll();
+
+        if (data.isEmpty()) {
+            return null;
+        }
+
+        return data.get(0).getBody();
+    }
 }

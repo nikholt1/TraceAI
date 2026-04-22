@@ -12,11 +12,11 @@ async function createCisData() {
     const csrfToken = getCsrfToken();
     const response = await fetch(`${BASE_URL}/api/cisdata`, {
         method: "POST",
+        credentials: "include",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded",
             "X-XSRF-TOKEN": csrfToken
-        },
-        body: new URLSearchParams({username, password})
+        }
     });
 }
 
@@ -49,6 +49,8 @@ function showMethods() {
     divMethods.style.padding = "1em";
     divMethods.classList.add("container");
     divMethods.innerHTML = `
+        <input type="text" id="promptInput" class="promptInput" placeholder="Ask AI about anything (maybe the weather?)">
+        <button id="promptBtn">Send</button>
         <h2>Available API Methods:</h2>
         <ul>
             <li><a href="/api/user"><code>GET /api/user</code></a></li>
@@ -56,6 +58,37 @@ function showMethods() {
         </ul>
     `;
     document.querySelector("body").appendChild(divMethods);
+    const promptBtn = document.getElementById("promptBtn");
+    const promptInput = document.getElementById("promptInput");
+
+    promptBtn.addEventListener("click", async () => {
+        const value = promptInput.value;
+
+        const result = await sendPrompt(value);
+        console.log(result);
+
+        const output = document.createElement("p");
+        output.textContent = result;
+        document.body.appendChild(output);
+    });
+}
+
+async function sendPrompt(value) {
+    const csrfToken = getCsrfToken();
+
+    const response = await fetch(`${BASE_URL}/api/prompt`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json",
+            "X-XSRF-TOKEN": csrfToken
+        },
+        body: JSON.stringify({
+            prompt: value
+        })
+    });
+
+    return await response.json();
 }
 
 function hideMethods() {

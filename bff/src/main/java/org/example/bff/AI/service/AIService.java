@@ -2,25 +2,43 @@ package org.example.bff.AI.service;
 
 
 import org.example.bff.AI.client.AIClient;
+import org.example.bff.cisagovAPI.model.CISData;
+import org.example.bff.cisagovAPI.service.CISDataService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
 public class AIService {
 
+    private static final Logger log = LoggerFactory.getLogger(AIService.class);
     private final AIClient aiClient;
-
-    public AIService(AIClient aiClient) {
+    private final CISDataService cisDataService;
+    public AIService(AIClient aiClient, CISDataService cisDataService) {
         this.aiClient = aiClient;
+        this.cisDataService = cisDataService;
     }
 
     public record ResponseDto(String response) {}
 
     public Mono<ResponseDto> getResponse(String prompt) {
+        prompt = checkAndInject(prompt);
         return aiClient.getResponses(prompt)
                 .map(this::mapToResponseDto);
+    }
+
+    private String checkAndInject(String prompt) {
+        String currentData = "";
+        if (prompt.contains("weather")) {
+            currentData = cisDataService.getNewestData();
+        }
+        prompt += "newest weather in copenhagen is: " + currentData;
+        System.out.println(prompt);
+        return prompt;
     }
 
     private ResponseDto mapToResponseDto(AIClient.SimpleResponse resp) {
