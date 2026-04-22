@@ -3,6 +3,7 @@ package com.example.aiapi.ai.controller;
 
 import com.example.aiapi.ai.service.OllamaService;
 import com.example.aiapi.ai.service.ResponseDto;
+import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,6 +26,13 @@ public class OllamaController {
     public ResponseEntity<ResponseDto> prompt(@RequestBody PromptRequest request) {
         return ResponseEntity.of(
                 Optional.of(ollamaService.prompt(request.prompt(), request.apiKey()))
+        );
+    }
+
+    @PostMapping("/testWithoutCPU")
+    public ResponseEntity<ResponseDto> promptWithoutCPU(@RequestBody PromptRequest request) {
+        return ResponseEntity.ok(
+                new ResponseDto("I'd be happy to help you test the weather!")
         );
     }
 

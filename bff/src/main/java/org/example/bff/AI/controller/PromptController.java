@@ -2,6 +2,7 @@ package org.example.bff.AI.controller;
 
 
 import org.example.bff.AI.service.AIService;
+import org.example.bff.AI.service.ResponseDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,9 +24,11 @@ public class PromptController {
     public record QueryRequest(String prompt) {}
 
     @PostMapping
-    public Mono<ResponseEntity<AIService.ResponseDto>> ask(@RequestBody QueryRequest queryRequest) {
-        var response = service.getResponse(queryRequest.prompt);
-        return response.map(ResponseEntity::ok);
+    public ResponseEntity<ResponseDto> ask(@RequestBody QueryRequest queryRequest) {
+
+        ResponseDto response = service.getResponse(queryRequest.prompt());
+
+        return ResponseEntity.ok(response);
     }
 
     ///  TODO implementer CISData ind i prompt:

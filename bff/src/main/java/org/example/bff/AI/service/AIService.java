@@ -16,51 +16,51 @@ import java.util.Map;
 public class AIService {
 
     private static final Logger log = LoggerFactory.getLogger(AIService.class);
+
     private final AIClient aiClient;
     private final CISDataService cisDataService;
 
-    private final String INSTRUCTION = """
+    private static final String INSTRUCTION = """
             If the user's message does not contain anything questioning the weather
             Rules:
             - Reprompt the user with the statement "i cannot answer anything else but about the weather"
-                 
             """;
-
-
 
     public AIService(AIClient aiClient, CISDataService cisDataService) {
         this.aiClient = aiClient;
         this.cisDataService = cisDataService;
     }
 
-    public record ResponseDto(String response) {}
+//    public record ResponseDto(String response) {}
 
-    public Mono<ResponseDto> getResponse(String prompt) {
+    public ResponseDto getResponse(String prompt) {
+
         cisDataService.createCISData();
-        prompt = INSTRUCTION + prompt;
-        prompt = checkAndInject(prompt);
-        return aiClient.getResponses(prompt)
-                .map(this::mapToResponseDto);
+
+        String finalPrompt = INSTRUCTION + prompt;
+        finalPrompt = checkAndInject(finalPrompt);
+
+        String aiResponse = aiClient.getResponses(finalPrompt);
+
+        if (aiResponse == null || aiResponse.isBlank()) {
+            return new ResponseDto("No response from Ollama");
+        }
+
+        return new ResponseDto(aiResponse);
     }
 
     private String checkAndInject(String prompt) {
+
         String currentData = "";
+
         if (prompt.contains("weather")) {
             currentData = cisDataService.getNewestData();
         }
-        prompt += currentData;
-        System.out.println(prompt);
-        return prompt;
-    }
 
-    private ResponseDto mapToResponseDto(AIClient.SimpleResponse resp) {
-        StringBuilder combinedText = new StringBuilder();
-        for (AIClient.Output output : resp.output()) {
-            for (AIClient.Content content : output.content()) {
-                combinedText.append(content.text());
-            }
-        }
-        return new ResponseDto(combinedText.toString());
-    }
+        String result = prompt + currentData;
 
+        System.out.println(result);
+
+        return result;
+    }
 }

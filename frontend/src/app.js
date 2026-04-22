@@ -49,6 +49,7 @@ function showMethods() {
     divMethods.style.padding = "1em";
     divMethods.classList.add("container");
     divMethods.innerHTML = `
+        <p id="responseField">Here goes the response</p>
         <input type="text" id="promptInput" class="promptInput" placeholder="Ask AI about anything (maybe the weather?)">
         <button id="promptBtn">Send</button>
         <h2>Available API Methods:</h2>
@@ -60,16 +61,15 @@ function showMethods() {
     document.querySelector("body").appendChild(divMethods);
     const promptBtn = document.getElementById("promptBtn");
     const promptInput = document.getElementById("promptInput");
-
+    const responseField = document.getElementById("responseField")
     promptBtn.addEventListener("click", async () => {
         const value = promptInput.value;
 
         const result = await sendPrompt(value);
         console.log(result);
 
-        const output = document.createElement("p");
-        output.textContent = result;
-        document.body.appendChild(output);
+        const text = result.response;
+        responseField.innerHTML += text;
     });
 }
 
