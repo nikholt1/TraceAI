@@ -1,0 +1,6 @@
+curl -X POST http://localhost:8082/api/ollama/v1 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "prompt": "test weather",
+    "apiKey": "thisisthekey32132321"
+  }'
