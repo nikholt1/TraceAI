@@ -18,12 +18,11 @@ public class EngineService {
         try {
             String body = """
                 {
-                  "model": "llama3.2",
+                  "model": "llama3.2:latest",
                   "prompt": "%s",
                   "stream": false
                 }
                 """.formatted(prompt.replace("\"", "\\\""));
-
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create("http://localhost:11434/api/generate"))
                     .header("Content-Type", "application/json")

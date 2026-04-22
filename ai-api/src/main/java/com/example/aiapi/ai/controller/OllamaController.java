@@ -20,10 +20,12 @@ public class OllamaController {
         this.ollamaService = ollamaService;
     }
 
-
-    @PostMapping()
-    public ResponseEntity<ResponseDto> prompt(@RequestBody String prompt, @RequestBody String APIKey) {
-        return ResponseEntity.of(Optional.of(ollamaService.prompt(prompt, APIKey)));
+    public record PromptRequest(String prompt, String apiKey) {}
+    @PostMapping
+    public ResponseEntity<ResponseDto> prompt(@RequestBody PromptRequest request) {
+        return ResponseEntity.of(
+                Optional.of(ollamaService.prompt(request.prompt(), request.apiKey()))
+        );
     }
 
 }

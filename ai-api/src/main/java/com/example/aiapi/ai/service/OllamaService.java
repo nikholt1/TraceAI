@@ -35,10 +35,17 @@ public class OllamaService {
             return false;
         }
 
-        if (ollamaRepository.findByApiKey(key) != null) {
-            return true;
-        } else {
-            return false;
+        List<APIKey> keys = ollamaRepository.findAll();
+
+        for (APIKey apiKeys : keys) {
+            System.out.println(apiKeys.getApiKey());
+            System.out.println(key);
+
+            if (key.equals(apiKeys.getApiKey())) {
+                return true;
+            }
         }
+
+        return false;
     }
 }

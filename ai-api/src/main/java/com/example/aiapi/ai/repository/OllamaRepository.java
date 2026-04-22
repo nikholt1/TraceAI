@@ -9,5 +9,4 @@ import org.springframework.stereotype.Repository;
 public interface OllamaRepository extends JpaRepository<APIKey, Long> {
 
 
-    String findByApiKey(String apiKey);
 }
