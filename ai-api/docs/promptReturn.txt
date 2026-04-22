@@ -1,0 +1,8 @@
+tail@tail-ThinkCentre-E73:~$ curl http://localhost:11434/api/generate \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "llama3.2:latest",
+    "prompt": "Hello, how are you?",
+    "stream": false
+  }'
+{"model":"llama3.2:latest","created_at":"2026-04-22T15:50:02.855121405Z","response":"I'm just a language model, so I don't have emotions or feelings like humans do. However, I'm functioning properly and ready to assist you with any questions or tasks you may have! How can I help you today?","done":true,"done_reason":"stop","context":[128006,9125,128007,271,38766,1303,33025,2696,25,6790,220,2366,18,271,128009,128006,882,128007,271,9906,11,1268,527,499,30,128009,128006,78191,128007,271,40,2846,1120,264,4221,1646,11,779,358,1541,956,617,21958,477,16024,1093,12966,656,13,4452,11,358,2846,31301,10489,323,5644,311,7945,499,449,904,4860,477,9256,499,1253,617,0,2650,649,358,1520,499,3432,30],"total_duration":27032326546,"load_duration":14220810086,"prompt_eval_count":31,"prompt_eval_duration":2051605781,"eval_count":47,"eval_duration":10565181155}
