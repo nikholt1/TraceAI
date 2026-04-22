@@ -92,6 +92,8 @@ public class CISDataService {
             return null;
         }
 
-        return data.get(0).getBody();
+        String fetchedData = data.getFirst().getBody();
+        System.out.println(fetchedData);
+        return fetchedData;
     }
 }

@@ -16,16 +16,18 @@ import java.util.List;
 @Service
 public class JwtTokenGenerator {
     private final JwtEncoder jwtEncoder;
+    private final TokenSubjectExtractor tokenSubjectExtractor;
 
-    public JwtTokenGenerator(JwtEncoder jwtEncoder) {
+    public JwtTokenGenerator(JwtEncoder jwtEncoder, TokenSubjectExtractor tokenSubjectExtractor) {
         this.jwtEncoder = jwtEncoder;
+        this.tokenSubjectExtractor = tokenSubjectExtractor;
     }
 
     public String generate(Authentication authentication) {
         Instant now = Instant.now();
         long expiry = 20L; // Token expiry time in seconds
 
-        String subject = authentication.getName();
+        String subject = tokenSubjectExtractor.extract(authentication);
 
         List<String> authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)

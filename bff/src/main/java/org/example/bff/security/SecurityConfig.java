@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.example.bff.security.RsaKeyProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
@@ -58,11 +59,14 @@ public class SecurityConfig {
                         .logoutUrl("/api/logout")
                         .logoutSuccessHandler((req, res, auth) -> res.setStatus(HttpServletResponse.SC_NO_CONTENT))
                 )
+                .oauth2Login(Customizer.withDefaults())
                 .exceptionHandling(eh -> eh
                         .authenticationEntryPoint((req, res, ex) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED))
                 );
         return http.build();
     }
+
+
 
     @Bean
     UserDetailsService userDetailsManager(PasswordEncoder passwordEncoder) {
