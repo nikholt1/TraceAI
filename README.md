@@ -54,6 +54,7 @@ cd ai-api
 ```
 
 ## Project Structure
-<img width="785" height="456" alt="image" src="https://github.com/user-attachments/assets/c5def42f-821e-46fa-b4d6-5d107cc97199" />
+<img width="620" height="539" alt="image" src="https://github.com/user-attachments/assets/d8a27905-6aec-438e-b957-90bdbb77a7f5" />
+
 
 
