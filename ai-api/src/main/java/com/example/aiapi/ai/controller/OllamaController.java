@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("api/ollama/v1")
+@RequestMapping("/api/ollama/v1")
 public class OllamaController {
     private final OllamaService ollamaService;
 
@@ -21,10 +21,10 @@ public class OllamaController {
         this.ollamaService = ollamaService;
     }
 
-    public record PromptRequest(String prompt, String apiKey) {}
+    public record PromptRequest(String prompt) {}
     @PostMapping
     public ResponseEntity<ResponseDto> prompt(@RequestBody PromptRequest request) {
-        ResponseDto response = ollamaService.prompt(request.prompt(), request.apiKey());
+        ResponseDto response = ollamaService.prompt(request.prompt());
         if (response.response().equals("401")) {
             return ResponseEntity.status(401).build();
         } else {

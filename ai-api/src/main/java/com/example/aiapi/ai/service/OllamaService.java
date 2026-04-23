@@ -20,32 +20,12 @@ public class OllamaService {
     }
 
 
-    public ResponseDto prompt(String prompt, String APIKey) {
-        if (isValid(APIKey)) {
-            String response = engineService.prompt(prompt);
-            ResponseDto responseDto = new ResponseDto(response);
-            return responseDto;
-        } else {
-            return new ResponseDto("Unautrorized");
-        }
+    public ResponseDto prompt(String prompt) {
+
+        String response = engineService.prompt(prompt);
+        ResponseDto responseDto = new ResponseDto(response);
+        return responseDto;
     }
 
-    public boolean isValid(String key) {
-        if (key == null) {
-            return false;
-        }
 
-        List<APIKey> keys = ollamaRepository.findAll();
-
-        for (APIKey apiKeys : keys) {
-            System.out.println(apiKeys.getApiKey());
-            System.out.println(key);
-
-            if (key.equals(apiKeys.getApiKey())) {
-                return true;
-            }
-        }
-
-        return false;
-    }
 }

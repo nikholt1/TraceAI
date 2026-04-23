@@ -1,14 +1,14 @@
 package org.example.bff.AI.controller;
 
 
+import org.apache.coyote.Response;
 import org.example.bff.AI.service.AIService;
 import org.example.bff.AI.service.ResponseDto;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
+
+import java.util.Optional;
 
 
 @RestController
@@ -23,9 +23,18 @@ public class PromptController {
 
     public record QueryRequest(String prompt) {}
 
+    @GetMapping("/establish")
+    public ResponseEntity<String> establishConnection() {
+        String response = service.establishConnection();
+        if (response != null && !response.isBlank()) {
+            return ResponseEntity.ok(response);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
     @PostMapping
     public ResponseEntity<ResponseDto> ask(@RequestBody QueryRequest queryRequest) {
-
+        System.out.println(queryRequest.prompt);
         ResponseDto response = service.getResponse(queryRequest.prompt());
 
         return ResponseEntity.ok(response);

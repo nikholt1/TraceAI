@@ -34,19 +34,17 @@ public class AIService {
 //    public record ResponseDto(String response) {}
 
     public ResponseDto getResponse(String prompt) {
-
         cisDataService.createCISData();
 
-        String finalPrompt = INSTRUCTION + prompt;
-        finalPrompt = checkAndInject(finalPrompt);
+        String finalPrompt = checkAndInject(INSTRUCTION + prompt);
 
-        String aiResponse = aiClient.getResponses(finalPrompt);
+        ResponseDto dto = aiClient.getResponses(finalPrompt);
 
-        if (aiResponse == null || aiResponse.isBlank()) {
+        if (dto == null || dto.response() == null || dto.response().isBlank()) {
             return new ResponseDto("No response from Ollama");
         }
 
-        return new ResponseDto(aiResponse);
+        return dto; // <-- return as-is
     }
 
     private String checkAndInject(String prompt) {
@@ -62,5 +60,8 @@ public class AIService {
         System.out.println(result);
 
         return result;
+    }
+    public String establishConnection() {
+        return aiClient.establishConnection();
     }
 }
