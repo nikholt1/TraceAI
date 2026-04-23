@@ -1,4 +1,11 @@
-<img width="40" height="40" alt="elefant" src="https://github.com/user-attachments/assets/7417d921-c86f-4b3c-8056-66282a2e9919" />
+<div style="text-align:center;">
+  <img 
+    width="100" 
+    height="100" 
+    alt="elefant"
+    src="https://github.com/user-attachments/assets/7417d921-c86f-4b3c-8056-66282a2e9919"
+  />
+</div>
 
 
 ### Trace
