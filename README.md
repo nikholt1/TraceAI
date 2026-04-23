@@ -1,4 +1,4 @@
-<img width="640" height="640" alt="elefant" src="https://github.com/user-attachments/assets/7417d921-c86f-4b3c-8056-66282a2e9919" />
+<img width="40" height="40" alt="elefant" src="https://github.com/user-attachments/assets/7417d921-c86f-4b3c-8056-66282a2e9919" />
 
 
 ### Trace
