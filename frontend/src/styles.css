@@ -1,3 +1,5 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 form {
     display: flex;
     flex-direction: column;
@@ -6,16 +8,35 @@ form {
     box-shadow: 4px 1px 4px 4px rgba(0, 0, 0, 0.55);
     padding: 10px;
 }
-
+body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+html, body {
+    height: 100%;
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+}
 label {
     margin-top: 10px;
 }
-
 input {
     padding: 8px;
     margin-top: 5px;
+    border-radius: 10px;
 }
 
+.promptInput {
+    flex: 1;
+    padding: 8px;
+    border-radius: 10px;
+    width: auto; /* remove 40vw */
+}
+
+.logoutBtn {
+    margin-top: 0;
+}
 button {
     font-size: 16px;
     margin-top: 15px;
@@ -26,7 +47,7 @@ button {
     color: black;
     appearance: none;
     -webkit-appearance: none;
-    width: 100%;
+    width: 60px;
 }
 
 button:hover {
@@ -45,25 +66,38 @@ button:hover {
 
 .container {
     display: flex;
-    flex-direction: column;
+    flex-direction: column; /* horizontal layout */
     align-items: center;
     justify-content: center;
-    border-radius: 10px;
-    background-color: #f0f0f0;
+
+    position: fixed;     /* stick to viewport */
+    top: 0;
+    left: 0;
+    width: 100%;         /* span full width */
+
+    padding: 10px;
+    border-radius: 0 0 10px 10px; /* only bottom corners rounded */
+    background-color: #ffffff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    max-width: 400px;
-    margin: 50px auto;
+
+    max-width: none;     /* remove 400px limit */
+    margin: 0;           /* remove centering */
+    z-index: 1000;       /* stay on top */
+}
+.containerForChat {
+    flex: 1;              /* takes remaining space */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+
+    max-width: 80vw;
+    width: 100%;
+    margin: 80px auto 0;  /* leaves space for top nav */
+    overflow: hidden;
 }
 
-/*#gh-provider {*/
-/*    display: flex;*/
-/*    align-items: center;*/
-/*    gap: 10px;*/
-/*    background-color: white;*/
-/*    width: 100%;*/
-/*    justify-content: center;*/
-/*    margin: 0;*/
-/*}*/
+
 
 #providers {
     display: flex;
@@ -86,4 +120,96 @@ svg {
     width: 24px;
     height: 24px;
     fill: #333;
+}
+
+
+.chat-container {
+    flex: 1;
+    width: 70vw;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+}
+
+.message {
+    max-width: 70%;
+    padding: 10px;
+    border-radius: 10px;
+    word-wrap: break-word;
+}
+
+/* LEFT (AI) */
+.message.ai {
+    align-self: flex-start;
+    background-color: #f1f1f1;
+}
+
+/* RIGHT (USER) */
+.message.user {
+    align-self: flex-end;
+    background-color: #939393;
+    color: white;
+}
+.connection {
+    font-size: 25px;
+}
+.logoutBtn {
+    width: 100%;
+}
+.elefantGif {
+    width: 150px;
+    height: 150px;
+}
+.input-row {
+    display: flex;
+    gap: 10px;
+
+    position: fixed;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    width: 70vw;
+    background: white;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.top-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 98%;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 10px 20px;
+    background-color: #ffffff;
+    color: #424242;
+
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    z-index: 1000;
+}
+
+.nav-left {
+    font-weight: bold;
+    font-size: 40px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.nav-right button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }

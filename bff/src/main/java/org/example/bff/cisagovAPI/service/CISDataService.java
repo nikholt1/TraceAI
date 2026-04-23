@@ -52,7 +52,9 @@ public class CISDataService {
         entity.setFetchedAt(LocalDateTime.now());
         entity.setBody(apiData);
 
-        return repo.save(entity);
+        CISData data = repo.save(entity);
+        System.out.println("In create data" + data.getBody());
+        return data;
     }
 //    public CISData createCISData() {
 //        String apiData = webClient
@@ -93,7 +95,7 @@ public class CISDataService {
         }
 
         String fetchedData = data.getFirst().getBody();
-        System.out.println(fetchedData);
+        fetchedData = "\n \n Newest weather in copenhagen is: " + fetchedData;
         return fetchedData;
     }
 }

@@ -23,7 +23,7 @@ async function createCisData() {
 async function initApp() {
     setupUi();
     showLoginForm();
-    await createCisData();
+    // await createCisData();
     try {
         // This request serves two purposes:
         // 1. If the user is already logged in, we get their user info
@@ -43,36 +43,76 @@ async function initApp() {
     }
 }
 
-function showMethods() {
+async function showMethods() {
     const divMethods = document.createElement("div");
     divMethods.id = "methods";
     divMethods.style.padding = "1em";
-    divMethods.classList.add("container");
+    divMethods.classList.add("containerForChat");
     divMethods.innerHTML = `
-        <input type="text" id="promptInput" class="promptInput" placeholder="Ask AI about anything (maybe the weather?)">
-        <button id="promptBtn">Send</button>
-        <h2>Available API Methods:</h2>
-        <ul>
-            <li><a href="/api/user"><code>GET /api/user</code></a></li>
-            <li><a href="/api/protected"><code>GET /api/protected</code></a></li>
-        </ul>
-    `;
-    document.querySelector("body").appendChild(divMethods);
+    <img class="elefantGif" src="image/elefant.gif" alt="">
+  <p id="connection" class="connection"></p>
+  <div id="chatContainer" class="chat-container"></div>
+
+  <div class="input-row">
+    <input type="text" id="promptInput" class="promptInput" placeholder="Ask AI about anything">
+    <button id="promptBtn">Send</button>
+  </div>
+`;
+
+    document.body.appendChild(divMethods);
+
+    const connectionText = document.getElementById("connection");
+
+    try {
+        connectionText.textContent = await getConnection();
+    } catch (e) {
+        connectionText.textContent = `Failed to connect: ${e.message}`;
+    }
+
     const promptBtn = document.getElementById("promptBtn");
     const promptInput = document.getElementById("promptInput");
+    const responseField = document.getElementById("responseField");
 
     promptBtn.addEventListener("click", async () => {
         const value = promptInput.value;
+        if (!value.trim()) return;
+        connectionText.textContent = "";
+        // show user message (RIGHT)
+        addMessage(value, "user");
+
+        promptInput.value = "";
 
         const result = await sendPrompt(value);
-        console.log(result);
 
-        const output = document.createElement("p");
-        output.textContent = result;
-        document.body.appendChild(output);
+        // show AI response (LEFT)
+        addMessage(result.response, "ai");
     });
 }
+function addMessage(text, type) {
+    const chat = document.getElementById("chatContainer");
 
+    const msg = document.createElement("div");
+    msg.classList.add("message", type);
+    msg.textContent = text;
+
+    chat.appendChild(msg);
+
+    // auto scroll
+    chat.scrollTop = chat.scrollHeight;
+}
+async function getConnection() {
+    const csrfToken = getCsrfToken();
+
+    const response = await fetch(`/api/prompt/establish`, {
+        method: "GET",
+        credentials: "include",
+        headers: csrfToken ? { "X-XSRF-TOKEN": csrfToken } : {}
+    });
+
+    const text = await response.text();
+    if (!response.ok) throw new Error(`${response.status}: ${text}`);
+    return text;
+}
 async function sendPrompt(value) {
     const csrfToken = getCsrfToken();
 
@@ -128,24 +168,35 @@ async function bootstrapCsrfAndMaybeGetUser() {
 function showUserInfo(user) {
     UI_ELEMENTS.userInfo.innerHTML = "";
 
-    const article = document.createElement("article");
-    article.style.padding = "1em";
+    const nav = document.createElement("nav");
+    nav.classList.add("top-nav");
 
-    const usernamePtag = document.createElement("p");
-    usernamePtag.textContent = `Logged in as: ${user.username}`;
+    const left = document.createElement("div");
+    left.classList.add("nav-left");
+    left.textContent = "<Trace"; // optional title/logo
 
-    const rolesPtag = document.createElement("p");
-    rolesPtag.textContent = `Roles: ${user.roles.join(", ")}`;
+    const right = document.createElement("div");
+    right.classList.add("nav-right");
+
+    const username = document.createElement("span");
+    username.textContent = `${user.username}`;
+
+    const roles = document.createElement("span");
+    roles.textContent = `(${user.roles.join(", ")})`;
 
     const logoutButton = document.createElement("button");
     logoutButton.textContent = "Logout";
+    logoutButton.classList.add("logoutBtn")
     logoutButton.addEventListener("click", handleLogout);
 
-    article.appendChild(usernamePtag);
-    article.appendChild(rolesPtag);
-    article.appendChild(logoutButton);
-    UI_ELEMENTS.userInfo.appendChild(article);
+    right.appendChild(username);
+    right.appendChild(roles);
+    right.appendChild(logoutButton);
 
+    nav.appendChild(left);
+    nav.appendChild(right);
+
+    UI_ELEMENTS.userInfo.appendChild(nav);
     UI_ELEMENTS.userInfo.classList.remove("hidden");
 }
 
