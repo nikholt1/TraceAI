@@ -24,16 +24,25 @@ public class OllamaController {
     public record PromptRequest(String prompt, String apiKey) {}
     @PostMapping
     public ResponseEntity<ResponseDto> prompt(@RequestBody PromptRequest request) {
-        return ResponseEntity.of(
-                Optional.of(ollamaService.prompt(request.prompt(), request.apiKey()))
-        );
+        ResponseDto response = ollamaService.prompt(request.prompt(), request.apiKey());
+        if (response.response().equals("401")) {
+            return ResponseEntity.status(401).build();
+        } else {
+            return ResponseEntity.of(
+                    Optional.of(response));
+        }
     }
 
     @PostMapping("/testWithoutCPU")
     public ResponseEntity<ResponseDto> promptWithoutCPU(@RequestBody PromptRequest request) {
-        return ResponseEntity.ok(
-                new ResponseDto("I'd be happy to help you test the weather!")
-        );
+        if (request.prompt.equals("test fail")) {
+            return ResponseEntity.status(401).build();
+        } else {
+            return ResponseEntity.ok(
+                    new ResponseDto("I'd be happy to help you test the weather!")
+            );
+
+        }
     }
 
 }
