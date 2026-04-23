@@ -76,29 +76,43 @@ async function showMethods() {
     promptBtn.addEventListener("click", async () => {
         const value = promptInput.value;
         if (!value.trim()) return;
-        connectionText.textContent = "";
-        // show user message (RIGHT)
-        addMessage(value, "user");
 
+        connectionText.textContent = "";
+        addMessage(value, "user");
         promptInput.value = "";
 
+        // show loading FIRST
+        const loadingMsg = addMessage("image/buildBall.gif", "ai", true);
+
+        // wait for response
         const result = await sendPrompt(value);
 
-        // show AI response (LEFT)
+        // remove loading
+        loadingMsg.remove();
+
+        // show response
         addMessage(result.response, "ai");
     });
 }
-function addMessage(text, type) {
+function addMessage(content, type, isImage = false) {
     const chat = document.getElementById("chatContainer");
 
     const msg = document.createElement("div");
     msg.classList.add("message", type);
-    msg.textContent = text;
+
+    if (isImage) {
+        const img = document.createElement("img");
+        img.src = content;
+        img.classList.add("loadingGif");
+        msg.appendChild(img);
+    } else {
+        msg.textContent = content;
+    }
 
     chat.appendChild(msg);
-
-    // auto scroll
     chat.scrollTop = chat.scrollHeight;
+
+    return msg;
 }
 async function getConnection() {
     const csrfToken = getCsrfToken();

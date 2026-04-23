@@ -33,7 +33,10 @@ input {
     border-radius: 10px;
     width: auto; /* remove 40vw */
 }
-
+.loadingGif {
+    width: 40px;
+    height: 40px;
+}
 .logoutBtn {
     margin-top: 0;
 }
