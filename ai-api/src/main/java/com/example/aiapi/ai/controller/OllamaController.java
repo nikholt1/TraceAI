@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @RestController
 @RequestMapping("/api/ollama/v1")
@@ -35,14 +37,23 @@ public class OllamaController {
 
     @PostMapping("/testWithoutCPU")
     public ResponseEntity<ResponseDto> promptWithoutCPU(@RequestBody PromptRequest request) {
+
+        List<String> responses = List.of(
+                "I'd be happy to help you test the weather!",
+                "Sure thing, in Copenhagen, Capital, Denmark Weather Forecast, with current conditions, wind, air quality",
+                "I dont know"
+        );
+
         if (request.prompt.equals("test fail")) {
             return ResponseEntity.status(401).build();
-        } else {
-            return ResponseEntity.ok(
-                    new ResponseDto("I'd be happy to help you test the weather!")
-            );
-
         }
+
+
+        int index = new Random().nextInt(responses.size());
+        String randomResponse = responses.get(index);
+
+        return ResponseEntity.ok(new ResponseDto(randomResponse));
     }
+
 
 }
