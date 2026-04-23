@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", initApp);
 
 const BASE_URL = ""; // nginx proxies requests, so relative URLs are enough
-const AI_URL = "http://localhost:8082/"
+
 const UI_ELEMENTS = {
     loginForm: null,
     messageDiv: null,
@@ -49,7 +49,8 @@ async function showMethods() {
     divMethods.style.padding = "1em";
     divMethods.classList.add("containerForChat");
     divMethods.innerHTML = `
-  <p id="connection"></p>
+    <img class="elefantGif" src="image/elefant.gif" alt="">
+  <p id="connection" class="connection"></p>
   <div id="chatContainer" class="chat-container"></div>
 
   <div class="input-row">
@@ -75,7 +76,7 @@ async function showMethods() {
     promptBtn.addEventListener("click", async () => {
         const value = promptInput.value;
         if (!value.trim()) return;
-
+        connectionText.textContent = "";
         // show user message (RIGHT)
         addMessage(value, "user");
 
@@ -172,7 +173,7 @@ function showUserInfo(user) {
 
     const left = document.createElement("div");
     left.classList.add("nav-left");
-    left.textContent = "Trace"; // optional title/logo
+    left.textContent = "<Trace"; // optional title/logo
 
     const right = document.createElement("div");
     right.classList.add("nav-right");
@@ -185,6 +186,7 @@ function showUserInfo(user) {
 
     const logoutButton = document.createElement("button");
     logoutButton.textContent = "Logout";
+    logoutButton.classList.add("logoutBtn")
     logoutButton.addEventListener("click", handleLogout);
 
     right.appendChild(username);
