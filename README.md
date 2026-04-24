@@ -41,6 +41,32 @@ To stop Ollama
 /bye
 ```
 
+To bind Ollama to localhost on loopback address only
+```bash
+sudo systemctl edit ollama
+```
+Add
+```bash
+[Service]
+Environment="OLLAMA_HOST=127.0.0.1:11434"
+```
+restart the service
+```bash
+sudo systemctl daemon-reexec
+sudo systemctl daemon-reload
+sudo systemctl restart ollama
+```
+
+Or manually
+```bash
+OLLAMA_HOST=127.0.0.1:11434 ollama serve
+```
+
+and verify
+```bash
+ss -ltnp | grep 11434
+```
+
 ### Project Setup
 ### 1. Change BFF client to use real endpoint
 
