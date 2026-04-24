@@ -14,8 +14,14 @@ This way, the service can be protected by a API key.
 
 
 ### Project Setup
+### 1. Change BFF client to use real endpoint
 
-### 1. Start nginx + frontend
+in bff/src/main/java/org/example/bff/AI/client/AIClient.java 
+line 32
+Remove the "/testWithoutCPU" to enable the real ollama call.
+
+
+### 2. Start nginx + frontend
 
 ```bash
 docker compose up
@@ -33,25 +39,27 @@ sudo systemctl stop nginx
 ```
 on the host machine and refresh the page.
 
-### 2. Starting the BFF
+### 3. Starting the BFF
 
 ```bash
 cd bff
 ./mvnw spring-boot:run
 ```
 
-### 3. Starting the Resource server
+### 4. Starting the Resource server
 
 ```bash
 cd resource
 ./mvnw spring-boot:run
 ```
 
-### 3. Starting the ai-api
+### 5. Starting the ai-api
 ```bash
 cd ai-api
 ./mvnw spring-boot:run
 ```
+
+
 
 ## Project Structure
 <img width="620" height="539" alt="image" src="https://github.com/user-attachments/assets/d8a27905-6aec-438e-b957-90bdbb77a7f5" />
