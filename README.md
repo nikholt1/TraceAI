@@ -7,11 +7,39 @@
 ### Trace
 Currently working with a weather API, but any API can be integrated to feed the Instructions of the AI.
 The program allows you to spin up a security layer proxy for calling Ollama local LLMs.
-This way, the service can be protected by a API key. 
+This way, the service can be protected by a API key. For more security tweak ollama to loopback address on 127.0.0.1
+
 
 <img width="1123" height="655" alt="image" src="https://github.com/user-attachments/assets/afacde63-a4aa-4b8d-ac03-201140f8374c" />
 
+### Dependency setup
+Install Ollama
+```bash
+curl -fsSL https://ollama.com/install.sh | sh
+```
 
+Check status
+```bash
+sudo systemctl status ollama
+```
+If not started run
+```bash
+sudo systemctl start ollama
+```
+
+To allow on boot start
+```bash
+sudo systemctl enable ollama
+```
+Donwload LLM model, this should also happen automatially on first endpoint to ollama localhost:11434
+```bash
+ollama run llama3.2:latest
+```
+
+To stop Ollama 
+```bash
+/bye
+```
 
 ### Project Setup
 ### 1. Change BFF client to use real endpoint
