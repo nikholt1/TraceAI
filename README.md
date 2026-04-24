@@ -65,4 +65,18 @@ cd ai-api
 <img width="620" height="539" alt="image" src="https://github.com/user-attachments/assets/d8a27905-6aec-438e-b957-90bdbb77a7f5" />
 
 
+## Key endpoints
+
+| Method | Path | Description |
+|--------|------|-------------|
+| `POST` | `/api/login` | Form login — sets session cookie |
+| `POST` | `/api/logout` | Clears session |
+| `GET`  | `/api/protected` | Protected resource (requires valid JWT) |
+| `GET`  | `/.well-known/jwks.json` | BFF's public RSA key (used by Resource server) |
+| `POST` | `/api/prompt` | BFF's endpoint to ai-api prompt 
+| `GET`  | `/api/prompt/establish` | BFF's endpoint to ai-api fetch check endpoint connection
+| `GET`  | `/api/ollama/v1/establish` | ai-api establish and respond endpoint (check API key)
+| `POST` | `/api/ollama/v1` | ai-api prompt endpoint called by BFF
+| `POST` | `/api/ollama/v1/testWithoutCPU` | ai-api prompt endpoint called by BFF if testing connection without read ai prompt
+| `POST` | `http://localhost:11434/api/generate` | ollama local endpoint
 
