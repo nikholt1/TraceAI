@@ -1,34 +1,44 @@
 name: Docker CI
+
 on:
   push:
-    branches:
-      - master
+    branches: [master]
   pull_request:
-    branches:
-      - master
+    branches: [master]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      packages: write
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
-      - name: Build Docker image
-        run: docker build -t app:test .
+      - name: Start services
+        run: docker compose -f docker-compose.ci.yml up -d --build
 
-      - name: Run Docker container
+      - name: Wait for services
         run: |
-          # Run the container in detached mode
-          docker compose up -d
-          
-          # Wait for a few seconds to ensure the container is up and running
-          sleep 20
-          
-          docker ps -a
-          docker logs <container_name>
+          sleep 40
+          docker compose -f docker-compose.ci.yml ps
+          docker compose -f docker-compose.ci.yml logs
 
-          # Stop and remove the container
-          docker compose down
+      - name: Health checks
+        run: |
+          curl -f http://localhost:8080/actuator/health
+          curl -f http://localhost:8081/actuator/health
+          curl -f http://localhost:8082/actuator/health
+
+      - name: Shutdown
+        if: always()
+        run: docker compose -f docker-compose.ci.yml down
+
+      - name: Log in to GHCR
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Tag & push images
+        run: |
+          docker tag bff ghcr.io/${{ github.repository }}/bff:latest
+          docker push ghcr.io/${{ github.repository }}/bff:latest
