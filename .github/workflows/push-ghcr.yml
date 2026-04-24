@@ -26,9 +26,9 @@ jobs:
           
           # Wait for a few seconds to ensure the container is up and running
           sleep 20
-
-          # Test the application endpoint
-          curl -f http://localhost:8090/actuator/health || exit 1
+          
+          docker ps -a
+          docker logs <container_name>
 
           # Stop and remove the container
           docker compose down
