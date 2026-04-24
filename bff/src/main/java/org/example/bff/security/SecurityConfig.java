@@ -44,7 +44,7 @@ public class SecurityConfig {
                         headers.frameOptions(frameOptions -> frameOptions.sameOrigin())
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/h2-console/**").permitAll()
+                        .requestMatchers("/h2-console", "/h2-console/**").permitAll()
                         .requestMatchers("/.well-known/jwks.json").permitAll()
                         .requestMatchers("/", "/index.html", "/login", "/favicon.ico", "/static/**").permitAll()
                         .requestMatchers("/api/**").authenticated()
