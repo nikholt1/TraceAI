@@ -1,0 +1,24 @@
+name: Docker CI reusable
+
+on:
+  workflow_call:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Test container
+        run: |
+          
+          docker compose up -d
+          
+          sleep 40
+          
+          curl -f http://localhost:80/actuator/health || exit 1
+          
+          docker compose down
