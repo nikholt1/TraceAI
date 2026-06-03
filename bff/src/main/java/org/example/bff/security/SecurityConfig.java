@@ -43,13 +43,17 @@ public class SecurityConfig {
                 .headers(headers ->
                         headers.frameOptions(frameOptions -> frameOptions.sameOrigin())
                 )
+//                .authorizeHttpRequests(auth -> auth
+//                        .requestMatchers("/h2-console", "/h2-console/**").permitAll()
+//                        .requestMatchers("/.well-known/jwks.json").permitAll()
+//                        .requestMatchers("/", "/index.html", "/login", "/favicon.ico", "/static/**").permitAll()
+//                        .requestMatchers("/api/**").authenticated()
+//                        .anyRequest().authenticated()
+//                )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/h2-console", "/h2-console/**").permitAll()
-                        .requestMatchers("/.well-known/jwks.json").permitAll()
-                        .requestMatchers("/", "/index.html", "/login", "/favicon.ico", "/static/**").permitAll()
-                        .requestMatchers("/api/**").authenticated()
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
+
                 .formLogin(form -> form
                         .loginProcessingUrl("/api/login")
                         .successHandler((req, res, auth) -> res.setStatus(HttpServletResponse.SC_NO_CONTENT))
