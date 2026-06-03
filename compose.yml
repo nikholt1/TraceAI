@@ -31,13 +31,13 @@ services:
   bff:
     build:
       context: .
-      dockerfile: bff/Dockerfile
+      dockerfile: Dockerfile
     ports:
       - "8080:8080"
 
   resource:
     build:
       context: .
-      dockerfile: resource/Dockerfile
+      dockerfile: Dockerfile
     ports:
       - "8081:8080"
