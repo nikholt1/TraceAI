@@ -2,22 +2,21 @@ FROM maven:3.9.11-eclipse-temurin-25 AS build
 
 WORKDIR /app
 
-
 COPY . .
 
+ARG MODULE=bff
 
-RUN mvn -B -pl bff -am dependency:go-offline
-
-
-RUN mvn -B clean package -DskipTests -pl bff -am
-
+RUN mvn -B -pl ${MODULE} -am dependency:go-offline
+RUN mvn -B clean package -DskipTests -pl ${MODULE} -am
 
 
 FROM eclipse-temurin:25-jre-alpine
 
 WORKDIR /app
 
-COPY --from=build /app/bff/target/*.jar app.jar
+ARG MODULE=bff
+
+COPY --from=build /app/${MODULE}/target/*.jar app.jar
 
 EXPOSE 8080
 
