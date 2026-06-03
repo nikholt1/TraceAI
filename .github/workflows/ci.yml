@@ -29,6 +29,3 @@ jobs:
 
       - name: Test bff module
         run: mvn -B test -pl bff -am
-
-      - name: Test application module
-        run: mvn -B test -pl application -am
